@@ -1,0 +1,54 @@
+#usda 1.0
+(
+    defaultPrim = "Root"
+    metersPerUnit = 1
+    upAxis = "Y"
+)
+
+reorder rootPrims = ["Root", "Phase2"]
+
+def Xform "Root"
+{
+    reorder nameChildren = ["Phase2", "ARModel", "SceneText", "SceneRoot"]
+    def Xform "ARModel" (
+        active = true
+    )
+    {
+        def "Phase1" (
+            active = true
+            references = @USDZ/Phase1.usdz@
+        )
+        {
+            float3 xformOp:scale = (1, 1, 1)
+            float3 xformOp:translate = (0, 0.3, -0.1)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+    }
+
+    def Xform "SceneText" (
+        active = true
+    )
+    {
+    }
+
+    def Xform "SceneRoot" (
+        active = true
+    )
+    {
+        def RealityKitCustomComponent "RealityKitContent_PointOfInterestComponent"
+        {
+            uniform token info:id = "RealityKitContent.PointOfInterestComponent"
+            string name = "Next"
+        }
+    }
+
+    def "Phase2" (
+        active = false
+        prepend references = @USDZ/Phase2.usdz@
+    )
+    {
+        float3 xformOp:scale = (1, 1, 1)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+    }
+}
+
